@@ -72,5 +72,17 @@
             "year" => "1987"
         ]
     ];
-    echo json_encode($db);
+    
+    $genre = $_GET['genre'];
+    $filteredArray = [];
+
+    foreach ($db as $album) {
+
+        if (strtolower($album['genre']) == strtolower($genre)) {
+
+            $filteredArray []= $album;
+        };
+    };
+
+    echo json_encode($filteredArray);
 ?>

@@ -50,7 +50,12 @@
 
                 mounted(){
 
-                    axios.get('data.php')
+                    axios.get('data.php', {
+
+                        params:{
+                            genre: 'rock',
+                        }
+                    })
                     .then(res => {
 
                         // console.log(res.data);
