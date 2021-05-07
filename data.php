@@ -74,15 +74,22 @@
     ];
     
     $genre = $_GET['genre'];
-    $filteredArray = [];
-
-    foreach ($db as $album) {
-
-        if (strtolower($album['genre']) == strtolower($genre)) {
-
-            $filteredArray []= $album;
+    
+    if ($genre == null || $genre == -1) {
+        
+        echo json_encode($db);
+        
+    } else {
+        
+        $filteredArray = [];
+        foreach ($db as $album) {
+     
+            if (strtolower($album['genre']) == strtolower($genre)) {
+    
+                $filteredArray []= $album;
+            };
         };
-    };
-
-    echo json_encode($filteredArray);
+    
+        echo json_encode($filteredArray);
+    }
 ?>

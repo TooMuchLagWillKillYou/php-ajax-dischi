@@ -11,23 +11,25 @@
 
     <style>
 
-        .container{
+        .grid{
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-
             font-family: sans-serif;
         }
         
         .box{
-
             display: inline-block;
             padding: 2em;
             border: 1px solid black;
         }
 
         img{
-
             width: 200px;
+        }
+
+        select{
+            display: block;
+            margin: 5em auto;
         }
         
     </style>
@@ -46,23 +48,42 @@
                 data: {
 
                     albums: [],
+                    genres: [],
+                    select: '-1'
+                },
+
+                methods: {
+
+                    selectGenres: function(){
+
+                        axios.get('data.php', {
+
+                            params: {
+                                genre: this.select
+                            }
+                        }).then(data => {
+
+                            console.log(data.data)
+                            this.albums = data.data;
+                        })
+                    }
                 },
 
                 mounted(){
 
-                    axios.get('data.php', {
-
-                        params:{
-                            genre: 'rock',
-                        }
-                    })
+                    axios.get('data.php')
                     .then(res => {
 
                         // console.log(res.data);
 
                         res.data.forEach(item => {
-                            
-                            this.albums.push(item)
+
+                            this.albums.push(item);
+
+                            if (!this.genres.includes(item.genre)){
+
+                                this.genres.push(item.genre);
+                            }
                         })
                     })
                 }
@@ -90,10 +111,21 @@
             // }
         ?> -->
 
-        <div v-for="album in albums" class="box">
-            <h3>{{ album.title }}</h3>
-            <h4>{{ album.author }}</h4>
-            <img :src="album.poster" alt="">
+        <select v-model="select" id="select" v-on:change="selectGenres">
+            
+            <option value="-1" selected="selected">All</option>
+            <option v-for="genre in genres" v-bind:value="genre" >{{ genre }}</option>
+
+        </select>
+
+        <div class="grid">
+
+            <div v-for="album in albums" class="box">
+                <h3>{{ album.title }}</h3>
+                <h4>{{ album.author }}</h4>
+                <img :src="album.poster" alt="">
+            </div>
+            
         </div>
         
     </div>
